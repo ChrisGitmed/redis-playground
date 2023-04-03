@@ -1,0 +1,46 @@
+{
+  "name": "redis-playground",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app/app.js",
+    "run": "node app/app.js",
+    "db:drop": "node ./app/scripts/dbDrop --run",
+    "db:reset": "yarn db:drop && yarn knex:m && yarn db:seed --run",
+    "docker:db": "docker run -d --name rp-db --restart unless-stopped -e POSTGRES_USER=user -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=rp -p 33499:5432 postgres:15",
+    "docker:redis": "docker run -p 6400:6379 --name rp-redis -d --restart unless-stopped redis:6.2 --requirepass localhostPassword123",
+    "redis:ui": "docker run -p 8329:8081 --name rp-redis-ui --link rp-redis -d --restart unless-stopped --env REDIS_HOST=rp-redis --env REDIS_PASSWORD=localhostPassword123 rediscommander/redis-commander",
+    "test:l": "node_modules/.bin/mocha app/lib/**/*.test.js --exit --timeout 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisGitmed/redis-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChrisGitmed/redis-playground/issues"
+  },
+  "homepage": "https://github.com/ChrisGitmed/redis-playground#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.1",
+    "knex": "^2.4.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "dark-args": "^0.0.4",
+    "eslint": "^8.37.0",
+    "helmet": "^6.0.1",
+    "js-shade": "^0.0.5",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22"
+  },
+  "type": "module"
+}
